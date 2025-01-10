@@ -24,6 +24,7 @@ public class EventController {
     @PostMapping("test")
     public void testJson(@RequestBody EventDTO dto) {
         Event e = new Event();
+
         e.setChatId(dto.getChatId());
         e.setEvent(dto.getEvent());
         e.setCreateTime(LocalDateTime.now());
