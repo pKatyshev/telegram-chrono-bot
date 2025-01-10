@@ -1,0 +1,63 @@
+version: "3.9"
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 2181:2181
+    networks:
+      - kafka-net
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    hostname: kafka
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    networks:
+      - kafka-net
+
+  db:
+    container_name: 'database'
+    image: postgres:14.7-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=chrono_bot
+    networks:
+      - kafka-net
+
+  producer:
+    container_name: 'producer-bot'
+    build:
+      context: .
+      dockerfile: producer/Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - kafka
+    networks:
+      - kafka-net
+
+  consumer:
+    container_name: 'consumer'
+    build:
+      context: .
+      dockerfile: consumer/Dockerfile
+    ports:
+      - 8081:8080
+    networks:
+      - kafka-net
+
+networks:
+  kafka-net:
+    driver: bridge
