@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventDTO {
+public class ServerResponseDTO {
     private long chatId;
-    private String event;
+    private String response;
 }

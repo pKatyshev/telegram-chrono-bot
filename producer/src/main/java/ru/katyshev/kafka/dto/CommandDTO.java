@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventDTO {
+public class CommandDTO {
     private long chatId;
-    private String event;
+    private String command;
 }

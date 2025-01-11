@@ -9,3 +9,7 @@ CREATE TABLE event
     event varchar(100),
     create_time timestamp
 )
+
+-- changeset katyshev:addDurationColumn
+
+ALTER TABLE event ADD COLUMN duration BIGINT;

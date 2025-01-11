@@ -3,6 +3,7 @@ package ru.katyshev.kafka.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +27,9 @@ public class Event {
     @Column(name = "create_time")
     private LocalDateTime createTime;
 
+    @Column(name = "duration")
+    private long duration;
+
     public Event() {
     }
 
@@ -35,6 +39,7 @@ public class Event {
                 "chatId=" + chatId +
                 ", event='" + event + '\'' +
                 ", createTime=" + createTime +
+                ", duration=" + duration +
                 '}';
     }
 }
