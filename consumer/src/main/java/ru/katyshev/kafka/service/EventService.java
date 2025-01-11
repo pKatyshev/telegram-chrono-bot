@@ -40,16 +40,12 @@ public class EventService {
             long duration = ChronoUnit.SECONDS.between(lastEvent.getCreateTime(), newEvent.getCreateTime());
             lastEvent.setDuration(duration);
         }
-
-        System.out.println(lastEvent);
     }
 
     public ServerResponseDTO getReport(long chatId) {
         List<EventSum> eventSums = eventRepository.getEventSummaryList(chatId);
         String textReport = constructTextReport(eventSums);
 
-
-        // TODO: 11.01.2025 write this
         return ServerResponseDTO.builder()
                 .chatId(chatId)
                 .response(textReport)
@@ -58,7 +54,6 @@ public class EventService {
 
     @Transactional
     public ServerResponseDTO deleteUserData(long chatId) {
-        // TODO: 11.01.2025 write this
         eventRepository.deleteAllByChatId(chatId);
 
         return ServerResponseDTO.builder()
@@ -81,7 +76,7 @@ public class EventService {
             sb.append(" - ");
             sb.append(es.getEvent());
         }
-        System.out.println(sb);
+
         return sb.toString();
     }
 }

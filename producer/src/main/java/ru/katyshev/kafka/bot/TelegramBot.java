@@ -21,7 +21,6 @@ import java.util.List;
 
 @Log
 @Component
-@EnableKafka
 public class TelegramBot extends TelegramLongPollingBot {
 
     @Value("${bot.name}")

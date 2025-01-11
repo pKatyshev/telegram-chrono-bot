@@ -20,7 +20,7 @@ public class KafkaResponseListener {
         this.telegramBot = telegramBot;
     }
 
-    @KafkaListener(id = "app.1", topics = RESPONSE_TOPIC)
+    @KafkaListener(topics = RESPONSE_TOPIC)
     public void eventListener(@Payload ServerResponseDTO serverResponseDTO) {
         telegramBot.sendMessage(serverResponseDTO.getChatId(), serverResponseDTO.getResponse());
     }

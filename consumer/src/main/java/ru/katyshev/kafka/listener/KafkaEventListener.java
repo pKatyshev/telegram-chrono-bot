@@ -1,5 +1,6 @@
 package ru.katyshev.kafka.listener;
 
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -12,6 +13,7 @@ import ru.katyshev.kafka.dto.ServerResponseDTO;
 import ru.katyshev.kafka.model.Event;
 import ru.katyshev.kafka.service.EventService;
 
+@Log
 @Component
 @EnableKafka
 public class KafkaEventListener {
@@ -30,29 +32,31 @@ public class KafkaEventListener {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    @KafkaListener(id = "app.1", topics = EVENT_TOPIC)
-    public void eventListener(@Payload EventDTO dto) {
-        Event e = new Event();
-        e.setChatId(dto.getChatId());
-        e.setEvent(dto.getEvent());
+    @KafkaListener(topics = EVENT_TOPIC)
+    public void eventListener(@Payload EventDTO eventDTO) {
+        log.info("new event");
+        Event event = Event.builder()
+                .chatId(eventDTO.getChatId())
+                .event(eventDTO.getEvent())
+                .build();
 
-        eventService.save(e);
+        eventService.save(event);
     }
 
     @KafkaListener(topics = COMMAND_TOPIC)
     public void eventListener(@Payload CommandDTO commandDTO) {
-        System.out.println("TOPIC COMMAND");
+        log.info("new command");
         ServerResponseDTO responseDTO;
         String command = commandDTO.getCommand();
 
         switch (command) {
             case "report" -> {
-                System.out.println("REPORT");
+                log.info("REPORT");
                 responseDTO = eventService.getReport(commandDTO.getChatId());
                 kafkaTemplate.send(RESPONSE_TOPIC, KEY, responseDTO);
             }
             case "delete" -> {
-                System.out.println("DELETE");
+                log.info("DELETE");
                 responseDTO = eventService.deleteUserData(commandDTO.getChatId());
                 kafkaTemplate.send(RESPONSE_TOPIC, KEY, responseDTO);
             }

@@ -1,15 +1,16 @@
 package ru.katyshev.kafka.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "event")
 public class Event {
 
